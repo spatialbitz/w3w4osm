@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>What3Words Codes for OSM buildings</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="dist/OverPassLayer.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="dist/OverPassLayer.js"></script>
+   
+    <style>
+      body {margin:0;padding:0;}
+      #map {position: absolute;top:0;bottom:0;right:0;left:0; width: 100%;height: 100%}
+  </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+     var map = new L.map('map',  { zoomControl:false }).setView([53.03719,11.56569], 18);
+    map.touchZoom.disable();
+	map.doubleClickZoom.disable();
+	map.scrollWheelZoom.disable();
+	map.boxZoom.disable();
+	map.keyboard.disable();
+
+
+      var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> Contributors'
+			,
+			}).addTo(map);
+	
+		var api = new L.OverPassLayer({
+			//endpoint : "http://overpass.osm.rambler.ru/cgi/",
+			endpoint : "http://overpass-api.de/api/",
+			query : "way(BBOX)['building'~'.'];out body center;",
+			debug : true,
+			callback : function(data) {
+				
+				
+				for (var i = 0; i < data.elements.length; i++) {
+					var e = data.elements[i];
+			
+					var x = e.center.lat;
+					var y = e.center.lon;
+					
+					var pos = new L.LatLng(x, y);
+					
+					var words_en = httpGet('http://api.what3words.com/position?key=YYZQY774&lang=en&position=' + x + ',' + y);
+    				var link_en = '<a href="http://what3words.com/' + words_en + '">' + words_en + '</a>';
+    
+					var popup = link_en;
+					
+					var color = 'red';
+					var circle = L.circle(pos, 1, {
+						color : color,
+						fillOpacity : 0
+					}).bindPopup(popup);
+					this.instance.addLayer(circle);
+
+				}
+			},
+		});
+		map.addLayer(api); 
+
+  	function httpGet(theUrl){
+      	var xmlHttp = null;
+    	xmlHttp = new XMLHttpRequest();
+    	xmlHttp.open( "GET", theUrl, false );
+    	xmlHttp.send( null );
+    	var parsedResponse = JSON.parse( xmlHttp.responseText );
+    	var words = String(parsedResponse['words']);
+    	var w3w = words.replace(/,/g,".");
+    	return w3w;
+  		}
+		
+
+    </script>
+  </body>
+</html>
