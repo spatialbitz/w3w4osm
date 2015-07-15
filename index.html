@@ -4,8 +4,10 @@
     <title>What3Words Codes for OSM buildings</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
     <link rel="stylesheet" href="dist/OverPassLayer.css" />
+    <link rel="stylesheet" href="dist/Control.OSMGeocoder.css" />
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="dist/OverPassLayer.js"></script>
+    <script src="dist/Control.OSMGeocoder.js"></script>
    
     <style>
       body {margin:0;padding:0;}
@@ -21,6 +23,9 @@
 	map.scrollWheelZoom.disable();
 	map.boxZoom.disable();
 	map.keyboard.disable();
+	
+	var osmGeocoder = new L.Control.OSMGeocoder();
+	map.addControl(osmGeocoder);
 
 
       var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
