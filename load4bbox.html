@@ -3,11 +3,11 @@
   <head>
     <title>What3Words Codes for OSM buildings</title>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-    <link rel="stylesheet" href="ext/overpasslayer/dist/OverPassLayer.css" />
-    <link rel="stylesheet" href="ext/geocoder/Control.OSMGeocoder.css" />
+    <link rel="stylesheet" href="dist/OverPassLayer.css" />
+    <link rel="stylesheet" href="dist/Control.OSMGeocoder.css" />
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src="ext/overpasslayer/dist/OverPassLayer.js"></script>
-    <script src="ext/geocoder/Control.OSMGeocoder.js"></script>
+    <script src="dist/OverPassLayer.js"></script>
+    <script src="dist/Control.OSMGeocoder.js"></script>
    
     <style>
       body {margin:0;padding:0;}
@@ -17,8 +17,13 @@
   <body>
     <div id="map"></div>
     <script>
-    var map = new L.map('map',  { zoomControl:false }).setView([53.03719,11.56569], 18);
-   	
+     var map = new L.map('map',  { zoomControl:false }).setView([53.03719,11.56569], 18);
+    map.touchZoom.disable();
+	map.doubleClickZoom.disable();
+	map.scrollWheelZoom.disable();
+	map.boxZoom.disable();
+	map.keyboard.disable();
+	
 	var osmGeocoder = new L.Control.OSMGeocoder();
 	map.addControl(osmGeocoder);
 
@@ -27,29 +32,15 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> Contributors'
 			,
 			}).addTo(map);
-		
-		
-	
-	map.on('click', function(e) {
-    
-    var bbox = (e.latlng.lat - 0.0001) + "," + (e.latlng.lng - 0.0002) + "," + (e.latlng.lat + 0.0001) + "," + (e.latlng.lng + 0.0002);
-    //var bbox = "53.0367,11.5637,53.0383,11.567";
-    console.log(bbox);
-    
-    setOverpassLayer(bbox);
-    
-	}); 
-			
-	function setOverpassLayer(bbox){	
 	
 		var api = new L.OverPassLayer({
-			endpoint : "http://overpass.osm.rambler.ru/cgi/",
-			//endpoint : "http://overpass-api.de/api/",
-			query : "way("+ bbox +")['building'~'.'];out body center;",
+			//endpoint : "http://overpass.osm.rambler.ru/cgi/",
+			endpoint : "http://overpass-api.de/api/",
+			query : "way(BBOX)['building'~'.'];out body center;",
 			debug : true,
 			callback : function(data) {
 				
-								
+				
 				for (var i = 0; i < data.elements.length; i++) {
 					var e = data.elements[i];
 			
@@ -73,9 +64,7 @@
 				}
 			},
 		});
-	map.addLayer(api); 
-		
-	}
+		map.addLayer(api); 
 
   	function httpGet(theUrl){
       	var xmlHttp = null;
