@@ -49,7 +49,7 @@
 					
 					var pos = new L.LatLng(x, y);
 					
-					var words_en = httpGet('http://api.what3words.com/position?key=YYZQY774&lang=en&position=' + x + ',' + y);
+					var words_en = httpGet('https://api.what3words.com/position?key=YYZQY774&lang=en&position=' + x + ',' + y);
     				var link_en = '<a href="http://what3words.com/' + words_en + '">' + words_en + '</a>';
     
 					var popup = link_en;
