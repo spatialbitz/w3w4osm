@@ -14,7 +14,7 @@ what3Words is an innovative, plain simple and multilingual addressing scheme:
 
 # Addresses for OSM buildings
 
-The OpenStreetMap database currently contains over 157.000.000 buildings. With this web application its easy to find out what3words addresses for OSM buildings. 
+The OpenStreetMap database currently contains over 157.000.000 buildings. With [this web application](https://spatialbitz.github.io/w3w4osm/) its easy to find out what3words addresses for OSM buildings. 
 
 # How to use it
 
